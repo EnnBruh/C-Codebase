@@ -9,7 +9,7 @@
  
   #define ENN_DEBUG_MODE
 
-  #define ENN_APP_DIRECTORY "Simulation"
+  #define ENN_APP_DIRECTORY "Game"
 //   #define ENN_DATA_PATH "/Data/"
 //   #define ENN_LOGS_PATH "/Data/Logs/"
 

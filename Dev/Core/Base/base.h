@@ -635,7 +635,7 @@ typedef enum ENN_CMP {
                         DEBUG_ASSERT((_ptr) != NULL, "Requested removal at address '%s' which is NULL from vector '%s'", TO_STR(_ptr), TO_STR(_vec));                                                                                                           \
                         DEBUG_ASSERT((sizeof (*(_vec).data)) == (sizeof (*(_ptr))), "Requested removal at address '%s' from vector '%s' of different size", TO_STR(_ptr), TO_STR(_vec));                                                                        \
                         DEBUG_ASSERT(((_ptr) >= (_vec).data + (_vec).start) && ((_ptr) < (_vec).data + (_vec).end), "Requested removal at address '%s' which is outside of vector '%s'", TO_STR(_ptr), TO_STR(_vec));                                           \
-                        swap((*(_ptr)), (_vec).data[vector_size(_vec) - 1]);                                                                                                                                                                                    \
+                        swap((*(_ptr)), (_vec).data[(_vec).end - 1]);                                                                                                                                                                                           \
                         --(_vec).end;                                                                                                                                                                                                                           \
                         DEBUG_UNTRACE();                                                                                                                                                                                                                        \
                 } while (0)
@@ -645,7 +645,7 @@ typedef enum ENN_CMP {
                         DEBUG_TRACE(vector_remove_at_index);                                                                                                                                                                                                    \
                         DEBUG_ASSERT(vector_size(_vec) > 0, "Requested removal on empty vector '%s'", TO_STR(_vec));                                                                                                                                            \
                         DEBUG_ASSERT(((_idx) >= (_vec).start) && ((_idx) < (_vec).end), "Requested removal at index '%s' which is outside of vector '%s'", TO_STR(_idx), TO_STR(_vec));                                                                         \
-                        swap((_vec).data[(_idx)], (_vec).data[vector_size(_vec) - 1]);                                                                                                                                                                          \
+                        swap((_vec).data[(_idx)], (_vec).data[(_vec).end - 1]);                                                                                                                                                                                 \
                         --(_vec).end;                                                                                                                                                                                                                           \
                         DEBUG_UNTRACE();                                                                                                                                                                                                                        \
                 } while (0)
@@ -704,11 +704,11 @@ typedef enum ENN_CMP {
                                                                                                                                                                                                                                                                 \
                                 i32 __i = __left - 1;                                                                                                                                                                                                           \
                                 for (i32 __j = __left; __j < __right; ++__j) {                                                                                                                                                                                  \
-                                if (_cmp((_vec).data[__j], (_vec).data[__right]) == ENN_SMALLER) {                                                                                                                                                              \
-                                        ++__i;                                                                                                                                                                                                                  \
-                                        if (__i != __j)                                                                                                                                                                                                         \
-                                                swap((_vec).data[__i], (_vec).data[__j]);                                                                                                                                                                       \
-                                }                                                                                                                                                                                                                               \
+                                        if (_cmp((_vec).data[__j], (_vec).data[__right]) == ENN_SMALLER) {                                                                                                                                                      \
+                                                ++__i;                                                                                                                                                                                                          \
+                                                if (__i != __j)                                                                                                                                                                                                 \
+                                                        swap((_vec).data[__i], (_vec).data[__j]);                                                                                                                                                               \
+                                        }                                                                                                                                                                                                                       \
                                 }                                                                                                                                                                                                                               \
                                 ++__i;                                                                                                                                                                                                                          \
                                 if (__i != __right)                                                                                                                                                                                                             \
@@ -921,7 +921,149 @@ typedef enum ENN_CMP {
                         ++(_deq).start;                                                                                                                                                                                                                         \
                         DEBUG_UNTRACE();                                                                                                                                                                                                                        \
                 } while (0)
+
+#       define deque_remove_at_address(_deq, _ptr)                                                                                                                                                                                                              \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_remove_at_address);                                                                                                                                                                                                   \
+                        DEBUG_ASSERT(deque_size(_deq) > 0, "Requested removal from empty deque '%s'", TO_STR(_deq));                                                                                                                                            \
+                        DEBUG_ASSERT((_ptr) != NULL, "Requested removal at address '%s' which is NULL from deque '%s'", TO_STR(_ptr), TO_STR(_deq));                                                                                                            \
+                        DEBUG_ASSERT((sizeof (*(_deq).data)) == (sizeof (*(_ptr))), "Requested removal at address '%s' from deque '%s' of different size", TO_STR(_ptr), TO_STR(_deq));                                                                         \
+                        DEBUG_ASSERT(((_ptr) >= (_deq).data + (_deq).start) && ((_ptr) < (_deq).data + (_deq).end), "Requested removal at address '%s' which is outside of deque '%s'", TO_STR(_ptr), TO_STR(_deq));                                            \
+                        swap((*(_ptr)), (_deq).data[(_deq).end - 1]);                                                                                                                                                                                           \
+                        --(_deq).end;                                                                                                                                                                                                                           \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
+#       define deque_remove_at_index(_deq, _idx)                                                                                                                                                                                                                \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_remove_at_index);                                                                                                                                                                                                     \
+                        DEBUG_ASSERT(deque_size(_deq) > 0, "Requested removal on empty deque '%s'", TO_STR(_deq));                                                                                                                                              \
+                        DEBUG_ASSERT(((_idx) >= (_deq).start) && ((_idx) < (_deq).end), "Requested removal at index '%s' which is outside of deque '%s'", TO_STR(_idx), TO_STR(_deq));                                                                          \
+                        swap((_deq).data[(_idx)], (_deq).data[(_deq).end - 1]);                                                                                                                                                                                 \
+                        --(_deq).end;                                                                                                                                                                                                                           \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
+#       define deque_remove_at_address_keep_order(_deq, _ptr)                                                                                                                                                                                                   \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_remove_at_address_keep_order);                                                                                                                                                                                        \
+                        DEBUG_ASSERT(deque_size(_deq) > 0, "Requested removal from empty deque '%s'", TO_STR(_deq));                                                                                                                                            \
+                        DEBUG_ASSERT((_ptr) != NULL, "Requested removal at address '%s' which is NULL from deque '%s'", TO_STR(_ptr), TO_STR(_deq));                                                                                                            \
+                        DEBUG_ASSERT((sizeof (*(_deq).data)) == (sizeof (*(_ptr))), "Requested removal at address '%s' from deque '%s' of different size", TO_STR(_ptr), TO_STR(_deq));                                                                         \
+                        DEBUG_ASSERT(((_ptr) >= (_deq).data + (_deq).start) && ((_ptr) < (_deq).data + (_deq).end), "Requested removal at address '%s' which is outside of deque '%s'", TO_STR(_ptr), TO_STR(_deq));                                            \
+                        memmove((_ptr), (_ptr) + 1, (size_t)(((_deq).data + (_deq).end) - ((_ptr) + 1)) * sizeof(*(_deq).data));                                                                                                                                \
+                        --(_deq).end;                                                                                                                                                                                                                           \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
+#       define deque_remove_at_index_keep_order(_deq, _idx)                                                                                                                                                                                                     \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_remove_at_index_keep_order);                                                                                                                                                                                          \
+                        DEBUG_ASSERT(deque_size(_deq) > 0, "Requested removal on empty deque '%s'", TO_STR(_deq));                                                                                                                                              \
+                        DEBUG_ASSERT(((_idx) >= (_deq).start) && ((_idx) < (_deq).end), "Requested removal at index '%s' which is outside of deque '%s'", TO_STR(_idx), TO_STR(_deq));                                                                          \
+                        memmove(&(_deq).data[(_idx)], &(_deq).data[(_idx) + 1], (size_t)((_deq).end - (_idx) - 1) * sizeof(*(_deq).data));                                                                                                                      \
+                        --(_deq).end;                                                                                                                                                                                                                           \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
+#       define deque_sort(_deq, _cmp, _start, _end)                                                                                                                                                                                                             \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_sort);                                                                                                                                                                                                                \
+                        if (deque_size(_deq) == 0) {                                                                                                                                                                                                            \
+                                DEBUG_LOG_WARN("Unnecessary sort request on empty deque '%s'", TO_STR(_deq));                                                                                                                                                   \
+                                DEBUG_UNTRACE();                                                                                                                                                                                                                \
+                                break;                                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        if ((_start) >= (_end)) {                                                                                                                                                                                                               \
+                                DEBUG_LOG_WARN("Requested sort on deque '%s' with bounds '%s' and '%s' which do not create a valid sequence for sorting", TO_STR(_deq), TO_STR(_start), TO_STR(_end));                                                          \
+                                DEBUG_UNTRACE();                                                                                                                                                                                                                \
+                                break;                                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        DEBUG_ASSERT(((_start) >= (_deq).start) && ((_start) <= (_deq).end), "Requested sort starting at '%s' which is outside of deque '%s' bounds", TO_STR(_start), TO_STR(_deq));                                                            \
+                        DEBUG_ASSERT(((_end) >= (_deq).start) && ((_end) <= (_deq).end), "Requested sort ending at '%s' which is outside of deque '%s' bounds", TO_STR(_end), TO_STR(_deq));                                                                    \
+                                                                                                                                                                                                                                                                \
+                        i32 __internal_stack[64]; /* Only need log2(2^31) for call stack so 62 for left and right index */                                                                                                                                      \
+                        i32 __internal_stack_top = -1;                                                                                                                                                                                                          \
+                        __internal_stack[++__internal_stack_top] = (_start);                                                                                                                                                                                    \
+                        __internal_stack[++__internal_stack_top] = (_end) - 1;                                                                                                                                                                                  \
+                                                                                                                                                                                                                                                                \
+                        while (__internal_stack_top >= 0) {                                                                                                                                                                                                     \
+                                i32 __right = __internal_stack[__internal_stack_top--];                                                                                                                                                                         \
+                                i32 __left  = __internal_stack[__internal_stack_top--];                                                                                                                                                                         \
+                                if (__left >= __right) continue;                                                                                                                                                                                                \
+                                                                                                                                                                                                                                                                \
+                                i32 __mid = __left + (__right - __left) / 2;                                                                                                                                                                                    \
+                                if (__mid != __right)                                                                                                                                                                                                           \
+                                        swap((_deq).data[__mid], (_deq).data[__right]);                                                                                                                                                                         \
+                                                                                                                                                                                                                                                                \
+                                i32 __i = __left - 1;                                                                                                                                                                                                           \
+                                for (i32 __j = __left; __j < __right; ++__j) {                                                                                                                                                                                  \
+                                        if (_cmp((_deq).data[__j], (_deq).data[__right]) == ENN_SMALLER) {                                                                                                                                                      \
+                                                ++__i;                                                                                                                                                                                                          \
+                                                if (__i != __j)                                                                                                                                                                                                 \
+                                                        swap((_deq).data[__i], (_deq).data[__j]);                                                                                                                                                               \
+                                        }                                                                                                                                                                                                                       \
+                                }                                                                                                                                                                                                                               \
+                                ++__i;                                                                                                                                                                                                                          \
+                                if (__i != __right)                                                                                                                                                                                                             \
+                                        swap((_deq).data[__i], (_deq).data[__right]);                                                                                                                                                                           \
+                                                                                                                                                                                                                                                                \
+                                i32 __left_size = (__i - 1) - __left;                                                                                                                                                                                           \
+                                i32 __right_size = __right - (__i + 1);                                                                                                                                                                                         \
+                                if (__left_size > __right_size) {                                                                                                                                                                                               \
+                                        if (__left_size > 0)  { __internal_stack[++__internal_stack_top] = __left; __internal_stack[++__internal_stack_top] = __i - 1; }                                                                                        \
+                                        if (__right_size > 0) { __internal_stack[++__internal_stack_top] = __i + 1; __internal_stack[++__internal_stack_top] = __right; }                                                                                       \
+                                } else {                                                                                                                                                                                                                        \
+                                        if (__right_size > 0) { __internal_stack[++__internal_stack_top] = __i + 1; __internal_stack[++__internal_stack_top] = __right; }                                                                                       \
+                                        if (__left_size > 0)  { __internal_stack[++__internal_stack_top] = __left; __internal_stack[++__internal_stack_top] = __i - 1; }                                                                                        \
+                                }                                                                                                                                                                                                                               \
+                        }                                                                                                                                                                                                                                       \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
+#       define deque_binary_search(_deq, _cmp, _elem, _pos, _start, _end)                                                                                                                                                                                       \
+                do {                                                                                                                                                                                                                                            \
+                        DEBUG_TRACE(deque_binary_search);                                                                                                                                                                                                       \
+                        if (deque_size(_deq) == 0) {                                                                                                                                                                                                            \
+                                DEBUG_LOG_WARN("Requested search for value '%s' in empty deque %s", TO_STR(_elem), TO_STR(_deq));                                                                                                                               \
+                                (_pos) = (_deq).end;                                                                                                                                                                                                            \
+                                DEBUG_UNTRACE();                                                                                                                                                                                                                \
+                                break;                                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        if ((_start) >= (_end)) {                                                                                                                                                                                                               \
+                                DEBUG_LOG_WARN("Requested search on deque '%s' for value '%s' with bounds '%s' and '%s' which do not create a valid sequence for search", TO_STR(_deq), TO_STR(_elem), TO_STR(_start), TO_STR(_end));                           \
+                                (_pos) = (_deq).end;                                                                                                                                                                                                            \
+                                DEBUG_UNTRACE();                                                                                                                                                                                                                \
+                                break;                                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        DEBUG_ASSERT((sizeof (*(_deq).data)) == (sizeof (_elem)), "Requested binary search for element '%s' in deque '%s' of different size", TO_STR(_elem), TO_STR(_deq));                                                                     \
+                        DEBUG_ASSERT(((_start) >= (_deq).start) && ((_start) <= (_deq).end), "Requested binary search starting at '%s' which is outside of deque '%s' bounds", TO_STR(_start), TO_STR(_deq));                                                   \
+                        DEBUG_ASSERT(((_end) >= (_deq).start) && ((_end) <= (_deq).end), "Requested binary search ending at '%s' which is outside of deque '%s' bounds", TO_STR(_end), TO_STR(_deq));                                                           \
+                        if ((_start) + 1 == (_end)) {                                                                                                                                                                                                           \
+                                if ((_cmp)((_deq).data[(_start)], (_elem)) == ENN_EQUAL) (_pos) = (_start);                                                                                                                                                     \
+                                else (_pos) = (_deq).end;                                                                                                                                                                                                       \
+                                DEBUG_UNTRACE();                                                                                                                                                                                                                \
+                                break;                                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        i32 _left = (_start), _right = (_end) - 1;                                                                                                                                                                                              \
+                        i32 _mid = (_deq).end;                                                                                                                                                                                                                  \
+                        ENN_CMP _cmp_res = ENN_ERR;                                                                                                                                                                                                             \
+                        (_pos) = (_deq).end;                                                                                                                                                                                                                    \
+                        while (_left <= _right) {                                                                                                                                                                                                               \
+                                _mid = (_left + _right) >> 1;                                                                                                                                                                                                   \
+                                _cmp_res = (_cmp)((_deq).data[_mid], (_elem));                                                                                                                                                                                  \
+                                if (_cmp_res == ENN_EQUAL) { (_pos) = _mid; break; }                                                                                                                                                                            \
+                                if (_cmp_res == ENN_BIGGER) _right = _mid - 1;                                                                                                                                                                                  \
+                                else _left = _mid + 1;                                                                                                                                                                                                          \
+                        }                                                                                                                                                                                                                                       \
+                        DEBUG_UNTRACE();                                                                                                                                                                                                                        \
+                } while (0)
+
 #endif
+
+// #define map(_key, _value)                                                                                                                                                                                                                                       \
+//                 struct {                                                                                                                                                                                                                                        \
+//                 } 
 
 /* ---------- Math Helpers ---------- */
 
@@ -1166,28 +1308,6 @@ ENNDEF_PUBLIC i32 file_remove(const char* filepath) {
         return remove(filepath);
 }
 
-/*
-   ENNDEF_PUBLIC string file_read_string(const char* filepath) {
-   DEBUG_ASSERT(filepath != NULL);
-
-   FILE* file = fopen(filepath, "r");
-   DEBUG_ASSERT(file != NULL, "Could not open file '%s'", filepath);
-
-   fseek(file, 0, SEEK_END);
-   i32 file_size = ftell(file);
-   DEBUG_ASSERT(file_size != -1, "Could not get file size for '%s'", filepath);
-   fseek(file, 0, SEEK_SET);
-
-   char* data = calloc(file_size + 1, (sizeof (char)));
-   DEBUG_ASSERT(data != NULL);
-
-   fread(data, (sizeof (char)), file_size, file);
-   fclose(file);
-
-   return (string) { .data = data, .size = file_size };
-   }
-   */
-
 ENNDEF_PUBLIC bool file_exists(const char* filepath) {
 #       if ENN_PLATFORM == ENN_WINDOWS
                 return GetFileAttributes(filepath) != INVALID_FILE_ATTRIBUTES;
@@ -1304,7 +1424,7 @@ ENNDEF_PRIVATE f32      datafile_get_f32(DataFile* df, char* keypath);
 ENNDEF_PRIVATE char*    datafile_get_cstring(DataFile* df, char* keypath);
 
 #ifdef __cplusplus
-}
+        }
 #endif
 
 #endif

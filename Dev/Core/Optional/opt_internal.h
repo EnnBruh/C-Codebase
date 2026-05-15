@@ -10,7 +10,7 @@
 
 #ifdef ENN_INCLUDE_OPTIONAL
 
-typedef struct _CoreState {
+struct _CoreState {
         bool            _running;
 
 #ifdef ENN_MULTI_WINDOW
@@ -20,9 +20,9 @@ typedef struct _CoreState {
 #endif
         f64             _time_current;
         f64             _time_delta;
-} _CoreState;
+};
 
-extern _CoreState _core_state;
+extern struct _CoreState _core_state;
 
 #endif
 

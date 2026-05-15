@@ -1,6 +1,6 @@
 #include "core_internal.h"
 
-_CoreState _core_state;
+struct _CoreState _core_state;
 
 #ifdef ENN_INCLUDE_OPTIONAL
 ENNDEF_PUBLIC void glfw_err(i32 error, const char* description) {
