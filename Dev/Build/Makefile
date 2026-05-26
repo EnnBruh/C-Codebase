@@ -6,7 +6,7 @@ ARFLAGS           := rcs
 
 CFLAGS            := -Werror -Wpedantic -std=gnu99
 DEBUG_CFLAGS      := -O0 -g -DENN_DEBUG_MODE
-RELEASE_CFLAGS    := -O3 -UENN_DEBUG_MODE
+RELEASE_CFLAGS    := -Ofast -fshort-enums -static -UENN_DEBUG_MODE
 
 CORE_DIR          := ../Core
 DEP_DIR           := ../Dep
