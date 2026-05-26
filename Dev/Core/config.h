@@ -7,7 +7,7 @@
 
  /* ----- Base Configs -----*/
  
-  #define ENN_DEBUG_MODE
+//   #define ENN_DEBUG_MODE is selected by the debug Makefile target. 
 
   #define ENN_APP_DIRECTORY "Game"
 //   #define ENN_DATA_PATH "/Data/"

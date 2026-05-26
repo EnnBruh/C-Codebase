@@ -9,19 +9,19 @@ A codebase for my C projects
 
 This Codebase uses a Makefile Build System to compile using GCC. You will need to download [Git](https://git-scm.com/install/windows), [MingW64](https://www.mingw-w64.org) and [Make](https://gnuwin32.sourceforge.net/packages/make.htm) and add them to your `PATH`.
 
-The Makefile can be found within the `Dev` directory and includes the following rules:
+Run the Makefile from the `Dev/Build` directory. It includes the following rules:
 ```
-make build_debug
+make debug
 ```
-Which is the default rule and will compile the library along with the source files present in the `Dev/App` directory in `DEBUG` mode.
+Which is the default rule and will compile `Dev/Build/Lib/core_debug.a` along with the source files present in the `Dev/App` directory in `DEBUG` mode. Build objects are cached within `Dev/Build/Obj/Debug` to avoid recompiling unchanged source files.
 ```
-make build_release
+make release
 ```
-Which will compile the files in `RELEASE` mode.
+Which will compile `Dev/Build/Lib/core_release.a` and the application files in `RELEASE` mode. Its objects are cached separately within `Dev/Build/Obj/Release`.
 ```
 make clean
 ```
-Which will delete the *.o* files created by the library along with the *.a* library binary.
+Which will delete cached build objects, executables, and the *.a* library binaries.
 
 
 # Dependencies

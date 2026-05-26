@@ -130,8 +130,8 @@ void core_term(void) {
 
 void core_run(void) {
         DEBUG_TRACE();
-        i32 i;
 
+        i32 i;
         if (_core_state._window_main.id != ENN_WINDOW_INVALID_ID) {
                 glfwMakeContextCurrent(_core_state._window_main.handle);
                 glClearColor(_core_state._window_main.buffer_clear_color.x, _core_state._window_main.buffer_clear_color.y, _core_state._window_main.buffer_clear_color.z, _core_state._window_main.buffer_clear_color.w);
