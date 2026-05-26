@@ -30,7 +30,7 @@ DEP_LIB           := $(wildcard $(addsuffix .a, $(addprefix $(DEP_DIR)/, $(SEARC
 ALL_SRC	          := $(CORE_SRC) $(APP_SRC) $(DEP_SRC)
 SOURCE_NAMES      := $(notdir $(ALL_SRC))
 ifneq ($(words $(SOURCE_NAMES)), $(words $(sort $(SOURCE_NAMES))))
-	$(error Source filenames must be unique to store object files without source directories)
+        $(error Source filenames must be unique to store object files without source directories)
 endif
 
 DEBUG_OBJ_DIR     := $(OBJ_DIR)/Debug
